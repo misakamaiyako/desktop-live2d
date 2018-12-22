@@ -1,0 +1,5 @@
+node_modules
+data/img/*
+.idea
+package-lock.json
+Live2d-win32-x64
