@@ -1,13 +1,8 @@
-// Modules to control application life and create native browser window
-const electron = require('electron')
-const {app, BrowserWindow,Tray,Menu} = electron
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
-
+const electron = require('electron');
+const {app, BrowserWindow,Tray,Menu} = electron;
+const fs = require('fs');
+let mainWindow;
 function createWindow () {
-    // Create the browser window.
     const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
     mainWindow = new BrowserWindow({
         width: 300,
@@ -20,7 +15,9 @@ function createWindow () {
         backgroundColor:'#00000000'
     });
     mainWindow.setIgnoreMouseEvents(true);
-    let tray = new Tray('./download.png');
+    let tray = new Tray('./download.ico');
+    let files = fs.readFileSync('./files.json');
+    files = JSON.parse(files);
     const contextMenu = Menu.buildFromTemplate([
         {
             label: '退出',
@@ -28,47 +25,42 @@ function createWindow () {
             click:()=>{
                 app.quit()
             }
+        },
+        {
+            label: '更换模型',
+            type: 'submenu',
+            submenu:(()=>{
+                let file = [];
+                files.forEach(t=>{
+                    file.push({
+                        label: t.name,
+                        type: 'radio'
+                    })
+                });
+                return file
+            })()
         }
     ]);
-    // tray.setToolTip('This is my application.')
+    tray.setToolTip('右键退出');
     tray.setContextMenu(contextMenu);
-    mainWindow.setSkipTaskbar(true)
-    // and load the index.html of the app.
+    mainWindow.setSkipTaskbar(true);
     mainWindow.loadFile('index.html');
-
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
-
-    // Emitted when the window is closed.
     mainWindow.on('closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
         mainWindow = null
-    })
+    });
+    setInterval(()=>{
+        console.log(tray.isDestroyed())
+    },1000)
 }
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
-
-// Quit when all windows are closed.
+app.on('ready', createWindow);
 app.on('window-all-closed', function () {
-    // On macOS it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit()
     }
-})
+});
 
 app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
         createWindow()
     }
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+});
