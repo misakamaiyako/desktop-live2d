@@ -1,6 +1,14 @@
 // let L2D = require('hexo-helper-live2d');
-L2Dwidget.init({
-    model:{
-        jsonPath:'./live2d-widget-model-shizuku/assets/shizuku.model.json'
-    }
+let ipcRenderer = require('electron').ipcRenderer;
+
+ipcRenderer.on('changeModel', (event, arg) => {
+    L2Dwidget.init({
+        model:{
+            jsonPath:arg
+        }
+    });
 });
+const { BrowserWindow } = require('electron')
+alert(1);
+let win = new BrowserWindow()
+win.webContents.openDevTools()

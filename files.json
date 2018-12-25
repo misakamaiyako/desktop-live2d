@@ -1,6 +1,6 @@
 [
-  {
-    "name": "shizuku",
-    "path": "F:\\l2d\\live2d-widget-model-shizuku/assets/shizuku.model.json"
-  }
+    {
+        "name": "shizuku",
+        "path": ".\\live2d-widget-model-shizuku\\assets\\shizuku.model.json"
+    }
 ]
