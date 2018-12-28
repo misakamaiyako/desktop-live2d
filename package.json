@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "packager": "electron-packager . Live2d"
+    "packager": "electron-packager . Live2d --overwrite"
   },
   "repository": "https://github.com/misakamaiyako/desktop-live2d",
   "keywords": [

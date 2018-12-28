@@ -1,6 +1,6 @@
 // let L2D = require('hexo-helper-live2d');
 let ipcRenderer = require('electron').ipcRenderer;
-
+let json = require('./files.json');
 ipcRenderer.on('changeModel', (event, arg) => {
     L2Dwidget.init({
         model:{
@@ -8,7 +8,10 @@ ipcRenderer.on('changeModel', (event, arg) => {
         }
     });
 });
-const { BrowserWindow } = require('electron')
-alert(1);
-let win = new BrowserWindow()
-win.webContents.openDevTools()
+if(json.length>0){
+    L2Dwidget.init({
+        model:{
+            jsonPath:json[0].path
+        }
+    });
+}
